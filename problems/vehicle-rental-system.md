@@ -1,6 +1,6 @@
 # Designing a Vehicle Rental System
 
-In this article, we explore the object-oriented design and implementation of a Vehicle Rental System using Java. 
+In this article, we explore the object-oriented design and implementation of a Vehicle Rental System using Python. 
 
 This system facilitates the renting of vehicles for short and long durations.
 
@@ -28,63 +28,54 @@ The Vehicle Rental System should:
 - `Vehicle`: Abstract class for various types of vehicles.
 - `Rental`: Represents a vehicle rental transaction.
 
-## Java Implementation
+## Python Implementation
 
 ### Vehicle Class (Abstract)
 
 Represents a generic vehicle.
 
-```java
-public abstract class Vehicle {
-    private String vehicleId;
-    private String model;
-    private double ratePerDay;
+```python
+class Vehicle:
+    def __init__(self, vehicleId, model, capacity, ratePerDay, colour, kmDriven):
+        self.vehicleId=vehicleId
+        self.model=model
+        self.capacity=capacity
+        self.colour=colour
+        self.kmDriven=kmDriven
+        self.ratePerDay=ratePerDay
+         ...and many more props
+    
+    ...getters and setters
 
-    public Vehicle(String vehicleId, String model, double ratePerDay) {
-        this.vehicleId = vehicleId;
-        this.model = model;
-        this.ratePerDay = ratePerDay;
-    }
-
-    // Getters and setters...
-}
 ```
 ### User Class
 Manages user account information.
-```java
-public class User {
-    private String userId;
-    private String name;
-    private String driverLicenseNumber;
-
-    public User(String userId, String name, String driverLicenseNumber) {
-        this.userId = userId;
-        this.name = name;
-        this.driverLicenseNumber = driverLicenseNumber;
-    }
-
-    // Getters and setters...
+```python
+class User:
+    def __init__(self, userId, name, age, driverLicenseNumber, gender):
+        self.userId=userId
+        self.name=name
+        self.age=age
+        self.driverLicenseNumber=driverLicenseNumber
+        self.gender=gender
+         ...and many more props
+    ...getters and setters
 }
 ```
 ### Rental Class
 Represents a vehicle rental transaction.
-```java
-import java.util.Date;
+```python
 
-public class Rental {
-    private String rentalId;
-    private User user;
-    private Vehicle vehicle;
-    private Date rentalDate;
-    private Date returnDate;
-    private double totalCharge;
+class Rental {
+    def __init__(self, rentalId, userId, vehicleId, rentalDate, returnDate,totalCharge,payment="NOT_COMPLETED"):
+        self.rentalId=rentalId
+        self.userId=userId
+        self.vehicleId=vehicleId
+        self.rentalDate=rentalDate
+        self.returnDate=returnDate
+        self.totalCharge=totalCharge
+        self.payment=payment
 
-    public Rental(String rentalId, User user, Vehicle vehicle, Date rentalDate) {
-        this.rentalId = rentalId;
-        this.user = user;
-        this.vehicle = vehicle;
-        this.rentalDate = rentalDate;
-    }
 
     public void completeRental(Date returnDate) {
         this.returnDate = returnDate;
