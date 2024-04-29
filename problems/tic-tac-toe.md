@@ -1,16 +1,14 @@
 # Designing a Tic Tac Toe Game
 
-This article explores the design and implementation of a Tic Tac Toe game using object-oriented principles in Java. 
-
-It's a classic game that provides a great opportunity to apply fundamental OOP concepts.
+This article explores the design and implementation of a Tic Tac Toe game using object-oriented principles in Python. 
 
 ## System Requirements
 
 The Tic Tac Toe game will:
 
-1. **Handle Player Moves:** Allow two players to alternately place their marks (X or O) on a 3x3 grid.
+1. **Handle Player Moves:** Allow M players to alternately place their marks (X, O, etc.) on a NxN grid.
 2. **Check for Win or Draw:** Determine the outcome of the game – a win for one player, a draw, or continuation.
-3. **Reset the Game:** Enable starting a new game after one round finishes.
+3. **Reset the Game:** Enable starting a new game at any point in time.
 
 ## Core Use Cases
 
@@ -23,16 +21,18 @@ The Tic Tac Toe game will:
 - `Board`: Represents the game board.
 - `Player`: Enum to represent the players (X and O).
 
-## Java Implementation
+## Python Implementation
 
-### Player Enum
+### Player Class
 Represents the players in the game.
 
-```java
-public enum Player {
-    X, O
-}
+```python
+Class Player():
+    def __init__(self,name,symbol):
+        self.name=name
+        self.symbol=symbol
 ```
+
 ### Board Class
 ```java
 public class Board {
