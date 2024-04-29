@@ -1,12 +1,12 @@
 # Designing a Tic Tac Toe Game
 
-This article explores the design and implementation of a Tic Tac Toe game using object-oriented principles in Python. 
+This article explores the design and implementation of a Tic Tac Toe game using OOPs in Python. 
 
 ## System Requirements
 
 The Tic Tac Toe game will:
 
-1. **Handle Player Moves:** Allow M players to alternately place their marks (X, O, etc.) on a NxN grid.
+1. **Handle Player Moves:** Allow P players to alternately place their marks/symbols (X, O, etc.) on a NxN grid.
 2. **Check for Win or Draw:** Determine the outcome of the game – a win for one player, a draw, or continuation.
 3. **Reset the Game:** Enable starting a new game at any point in time.
 
@@ -19,7 +19,7 @@ The Tic Tac Toe game will:
 ## Key Classes:
 - `TicTacToe`: Manages the overall game.
 - `Board`: Represents the game board.
-- `Player`: Enum to represent the players (X and O).
+- `Player`: Class to represent the players and their marks.
 
 ## Python Implementation
 
@@ -27,98 +27,102 @@ The Tic Tac Toe game will:
 Represents the players in the game.
 
 ```python
-Class Player():
-    def __init__(self,name,symbol):
-        self.name=name
-        self.symbol=symbol
+class Player:
+    def __init__(self, name, symbol):
+        self.name = name
+        self.symbol = symbol
 ```
 
 ### Board Class
-```java
-public class Board {
-    private Player[][] board;
-    private final int size = 3;
+Represents the game board.
 
-    public Board() {
-        board = new Player[size][size];
-    }
+```python
+class Board:
+    def __init__(self, size):
+        self.size = size
+        self.markersPlaced = 0
+        self.board = []
+        for i in range(size):
+            self.board([""] * size)
+        self.rowData = {}
+        self.colData = {}
+        self.diagData = {0: {}, 1: {}}
 
-    public boolean makeMove(Player player, int row, int col) {
-        if (row >= 0 && row < size && col >= 0 && col < size && board[row][col] == null) {
-            board[row][col] = player;
-            return true;
-        }
-        return false;
-    }
+    def isFull(self):
+        return self.markersPlaced == self.size * self.size
 
-    public Player checkWinner() {
-        // Check rows and columns
-        for (int i = 0; i < size; i++) {
-            if (board[i][0] != null && board[i][0] == board[i][1] && board[i][1] == board[i][2])
-                return board[i][0];
-            if (board[0][i] != null && board[0][i] == board[1][i] && board[1][i] == board[2][i])
-                return board[0][i];
-        }
+    def resetBoard(self):
+        self.size = size
+        self.markersPlaced = 0
+        self.board = []
+        for i in range(size):
+            self.board([""] * size)
+        self.rowData = {}
+        self.colData = {}
+        self.diagData = {0: {}, 1: {}}
 
-        // Check diagonals
-        if (board[0][0] != null && board[0][0] == board[1][1] && board[1][1] == board[2][2])
-            return board[0][0];
-        if (board[0][2] != null && board[0][2] == board[1][1] && board[1][1] == board[2][0])
-            return board[0][2];
+    def makeMove(self, player, row, col):
+        if self.board[row][col] != "":
+            raise ValueError("Not an empty space")
 
-        return null;
-    }
+        self.board[row][col] = player.symbol
+        self.markersPlaced += 1
+        result = False
 
-    public boolean isFull() {
-        for (Player[] row : board) {
-            for (Player cell : row) {
-                if (cell == null) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
+        if row not in self.rowData.keys():
+            self.rowData[row] = {}
+        if player.symbol not in self.rowData[row].keys():
+            self.rowData[row][player.symbol] = 0
+        self.rowData[row][player.symbol] += 1
+        if self.rowData[row][player.symbol] == self.size:
+            result = True
 
-    public void reset() {
-        for (int i = 0; i < size; i++) {
-            Arrays.fill(board[i], null);
-        }
-    }
-}
+        if col not in self.colData.keys():
+            self.colData[col] = {}
+        if player.symbol not in self.colData[col].keys():
+            self.colData[col][player.symbol] = 0
+        self.colData[col][player.symbol] += 1
+        if self.colData[col][player.symbol] == self.size:
+            result = True
+
+        if row == col:
+            if player.symbol not in self.diagData[0].keys():
+                self.diagData[0][player.symbol] = 0
+            self.diagData[0][player.symbol] += 1
+        if self.diagData[0][player.symbol] == self.size:
+            result = True
+
+        if row + col == self.size - 1:
+            if player.symbol not in self.diagData[1].keys():
+                self.diagData[1][player.symbol] = 0
+            self.diagData[1][player.symbol] += 1
+        if self.diagData[1][player.symbol] == self.size:
+            result = True
+
+        return result
 ```
 ### TicTacToe Class
-```java
-public class TicTacToe {
-    private Board board;
-    private Player currentPlayer;
-    private GameState gameState;
+```python
+from enum import Enum
 
-    public TicTacToe() {
-        board = new Board();
-        currentPlayer = Player.X; // X starts the game
-        gameState = GameState.PLAYING;
-    }
+class GameState(Enum):
+    NOT_STARTED = 1
+    IN_PROGRESS = 2
+    WIN = 3
+    TIE = 4
 
-    public void playMove(int row, int col) {
-        if (board.makeMove(currentPlayer, row, col)) {
-            Player winner = board.checkWinner();
-            if (winner != null) {
-                gameState = (winner == Player.X) ? GameState.X_WON : GameState.O_WON;
-            } else if (board.isFull()) {
-                gameState = GameState.DRAW;
-            } else {
-                currentPlayer = (currentPlayer == Player.X) ? Player.O : Player.X;
-            }
-        }
-    }
+class TicTacToe:
+    def __init__(self):
+        self.gameState = GameState.NOT_STARTED
 
-    public void resetGame() {
-        board.reset();
-        currentPlayer = Player.X;
-        gameState = GameState.PLAYING;
-    }
-
-    // Getters and other methods...
-}
+    def play(self):
+        gameBoard = Board(3)
+        player1 = Player("A", "X")
+        player2 = Player("B", "O")
+        self.gameState = IN_PROGRESS
+        while self.gameState == IN_PROGRESS:
+            if gameBoard.isFull():
+                self.gameState = GameState.TIE
+                break
+        ...contd
 ```
