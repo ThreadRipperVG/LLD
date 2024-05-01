@@ -1,6 +1,6 @@
 # Designing an Online Music Streaming Service Like Spotify
 
-This article focuses on developing an object-oriented design for an Online Music Streaming Service similar to Spotify using Java. 
+This article focuses on developing an object-oriented design for an Online Music Streaming Service similar to Spotify using Python. 
 
 The system aims to deliver a comprehensive music streaming experience.
 
@@ -38,140 +38,267 @@ Key Classes:
 
 Manages user account information and preferences.
 
-```java
-public class User {
-    private String userId;
-    private String name;
-    private Subscription subscription;
-    private List<Playlist> playlists;
+```python
+from enum import Enum
+from typing import List
+from datetime import datetime
+from random import randint
 
-    public User(String userId, String name) {
-        this.userId = userId;
-        this.name = name;
-        this.playlists = new ArrayList<>();
-        this.subscription = new Subscription();
-    }
 
-    public void createPlaylist(String playlistName) {
-        Playlist newPlaylist = new Playlist(playlistName);
-        playlists.add(newPlaylist);
-    }
+# Subscription Class
+class SubscriptionType(Enum):
+    FREE = 1
+    PREMIUM = 2
+    STUDENT = 3
+    FAMILY = 4
 
-    // Getters and setters...
-}```
-### Song Class
-Represents an individual music track.
-```java
-public class Song {
-    private String songId;
-    private String title;
-    private String artist;
-    private String album;
-    private double duration;
 
-    public Song(String songId, String title, String artist, String album, double duration) {
-        this.songId = songId;
-        this.title = title;
-        this.artist = artist;
-        this.album = album;
-        this.duration = duration;
-    }
+class Subscription:
+    def __init__(
+        self,
+        price: int,
+        fromDate: int,
+        toDate: int,
+        subscriptionType: SubscriptionType = SubscriptionType.FREE,
+    ):
+        self.subscriptionType = subscriptionType
+        self.price = price
+        self.fromDate = fromDate
+        self.toDate = toDate
 
-    // Getters and setters...
-}
-```
-### Playlist Class
-Manages a collection of songs.
-```java
-import java.util.ArrayList;
-import java.util.List;
 
-public class Playlist {
-    private String name;
-    private List<Song> songs;
+# Song Class
+class GenreType(Enum):
+    JAZZ = 1
+    POP = 2
+    INDIE = 3
+    CLASSICAL = 4
+    ROMANTIC = 5
+    ADVENTUROUS = 6
 
-    public Playlist(String name) {
-        this.name = name;
-        this.songs = new ArrayList<>();
-    }
 
-    public void addSong(Song song) {
-        songs.add(song);
-    }
+class Song:
+    def __init__(
+        self,
+        songId: str,
+        name: str,
+        artist: str,
+        album: str,
+        year: str,
+        genre: List[str],
+        duration: int,
+        audioFile: str,
+    ):
+        self.songId = songId
+        self.name = name
+        self.artist = artist
+        self.album = album
+        self.year = year
+        self.genre = genre
+        self.duration = audioFile
+        self.audioFile = audioFile
 
-    // Getters and setters...
-}
-```
-### Subscription Class
-Handles user subscription details.
-```java
-public class Subscription {
-    private SubscriptionType type;
-    private double price;
+    def editSong(
+        self,
+        name: str,
+        artist: str,
+        album: str,
+        year: str,
+        genre: List[str],
+        audioFile: str,
+    ):
+        self.name = name
+        self.artist = artist
+        self.album = album
+        self.year = year
+        self.genre = genre
+        self.audioFile = audioFile
 
-    public Subscription() {
-        this.type = SubscriptionType.FREE;
-        this.price = 0.0;
-    }
+    def play(self):
+        print("Playing song", self.name, "by", self.artist)
+        pass
 
-    public void upgradeSubscription(SubscriptionType newType) {
-        this.type = newType;
-        // Set price based on subscription type
-    }
 
-    // Getters and setters...
-}
+# Playlist Class
+class Playlist:
+    def __init__(self, playlistId: str, name: str, songs: List[Song]):
+        self.playlistId = playlistId
+        self.name = name
+        self.songs = songs
 
-enum SubscriptionType {
-    FREE, PREMIUM
-}
-```
-### MusicStreamingService Class
-```java
-public class MusicStreamingService {
-    private List<User> users;
-    private List<Song> songs;
+    def editPlaylist(self, playlistId: str, name: str, songs: List[Song]):
+        self.playlistId = playlistId
+        self.name = name
+        self.songs = songs
 
-    public MusicStreamingService() {
-        this.users = new ArrayList<>();
-        this.songs = new ArrayList<>();
-    }
+    def addSongs(self, songs: List[Song]) -> None:
+        self.songs.extend(songs)
 
-    public void addUser(User user) {
-        users.add(user);
-    }
+    def removeSong(self, song: Song):
+        self.playlists.remove(song)
 
-    public void addSong(Song song) {
-        songs.add(song);
-    }
+    def reorderPlaylist(self, songs: List[Song]):
+        self.songIds = songs
 
-    public List<Song> searchSongs(String title) {
-        // Implement search logic to find songs by title
-        List<Song> foundSongs = new ArrayList<>();
-        for (Song song : songs) {
-            if (song.getTitle().equalsIgnoreCase(title)) {
-                foundSongs.add(song);
-            }
-        }
-        return foundSongs;
-    }
 
-    public void subscribeUser(String userId, SubscriptionType subscriptionType) {
-        User user = findUserById(userId);
-        if (user != null) {
-            user.getSubscription().upgradeSubscription(subscriptionType);
-        }
-    }
+# User Class
+class User:
+    def __init__(
+        self, userId: str, name: str, age: int, subscription: List[Subscription] = []
+    ):
+        self.userId = userId
+        self.name = name
+        self.age = age
+        self.subscription = subscription
+        self.history = []
+        self.playlists = []
+        if self.subscription == []:
+            self.subscription.append(
+                Subscription(0, datetime.now(), -1, SubscriptionType.FREE)
+            )
 
-    private User findUserById(String userId) {
-        for (User user : users) {
-            if (user.getUserId().equals(userId)) {
-                return user;
-            }
-        }
-        return null;
-    }
+    # Getter Setter for individual component
+    def createPlaylist(self, playlist: Playlist) -> None:
+        self.playlists.append(playlist)
 
-    // Other necessary methods...
-}
+    def deletePlaylist(self, playlist: Playlist):
+        self.playlists.remove(playlist)
+
+    def editUserDetails(self, name: str, age: str):
+        self.name = name
+        self.age = age
+
+    def editUserSubscription(self, subscription: Subscription):
+        self.subscription.append(subscription)
+
+    def getCurrentSubscription(self) -> Subscription:
+        dateNow = datetime.now()
+        for i in range(len(self.subscription) - 1, -1, -1):
+            if (
+                self.subscription[i].toDate == -1
+                or self.subscription[i].toDate >= dateNow
+            ):
+                currSubs = self.subscription[i]
+                print(
+                    "Current subscription is",
+                    self.subscription[i].subscriptionType,
+                    "priced at",
+                    str(self.subscription[i].price),
+                    "from",
+                    str(self.subscription[i].fromDate),
+                    "to",
+                    str(self.subscription[i].toDate),
+                )
+                return currSubs
+
+    def playSong(self, song: Song):
+        self.history.append([song, datetime.now()])
+        song.play()
+
+
+# Music Service Class
+class MusicService:
+    def __init__(
+        self,
+        users: List[User],
+        songsList: List[Song],
+        defaultPlaylists: List[Playlist],
+    ):
+        self.users = users
+        self.songsList = songsList
+        self.defaultPlaylists = defaultPlaylists
+
+    def addUser(self, user: User) -> None:
+        self.users.append(user)
+
+    def removeUser(self, user: User):
+        self.users.remove(user)
+
+    def searchSong(self, searchText: str, searchField: str) -> Song:
+        for song in self.songsList:
+            if searchText.lower() in song["searchField"]:
+                return song
+        raise ValueError("Song with details not found")
+
+    def getRecommendationForUser(self, user: User) -> Song:
+        songsList = []
+        for playlist in user.playlists:
+            for song in playlist.songs:
+                songsList.append(song)
+        for playlist in self.defaultPlaylists:
+            for song in playlist.songs:
+                songsList.append(song)
+        return songsList[randint(0, len(songsList) - 1)]
+
+    def playSongForUser(self, user: User, song: Song):
+        user.playSong(song)
+
+
+# Driver Code
+
+# Create User
+usersList: List[User] = []
+for i in range(5):
+    usersList.append(User(i, "UserName" + str(i), i + 25, []))
+    print(
+        "Created User",
+        usersList[i].name,
+        "subscription",
+        str(usersList[i].getCurrentSubscription()),
+    )
+
+# remove User
+usersList[0].editUserSubscription(
+    Subscription(100, datetime.now(), -1, SubscriptionType.PREMIUM)
+)
+usersList[0].getCurrentSubscription()
+
+# Edit subscription
+usersList[0].editUserSubscription(
+    Subscription(100, datetime.now(), -1, SubscriptionType.PREMIUM)
+)
+usersList[0].getCurrentSubscription()
+
+# Create Song
+songsList: List[Song] = []
+for i in range(10):
+    songsList.append(
+        Song(
+            i,
+            "SongName" + str(i),
+            "Artist",
+            "Album" + str(i),
+            i + 200,
+            [GenreType.POP, GenreType.ADVENTUROUS],
+            100,
+            "AudioFile" + str(i),
+        )
+    )
+    print("Created Song", songsList[i].name, "file location", songsList[i].audioFile)
+
+playlists: List[Playlist] = []
+for i in range(0, 10, 2):
+    playlists.append(
+        Playlist(str(i), "PlaylistName" + str(i), [songsList[i], songsList[i + 1]])
+    )
+
+musicService = MusicService(usersList, songsList, [playlists[3], playlists[4]])
+
+usersList[0].createPlaylist(playlists[0])
+usersList[0].createPlaylist(playlists[1])
+usersList[1].createPlaylist(playlists[1])
+usersList[1].createPlaylist(playlists[2])
+usersList[2].createPlaylist(playlists[2])
+usersList[2].createPlaylist(playlists[3])
+
+musicService.playSongForUser(usersList[0], songsList[4])
+musicService.playSongForUser(usersList[0], songsList[3])
+musicService.playSongForUser(usersList[0], songsList[5])
+musicService.playSongForUser(usersList[0], songsList[4])
+print(usersList[0].history)
+
+print(musicService.getRecommendationForUser(usersList[1]))
+print(musicService.getRecommendationForUser(usersList[1]))
+print(musicService.getRecommendationForUser(usersList[1]))
+
 ```
