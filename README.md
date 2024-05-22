@@ -27,7 +27,7 @@ Learn Low Level Design (LLD) and prepare for interviews using free resources.
 
 ## Low Level Design Interview Problems
 ### Easy
-- [Design a Random Number Generator] (problems/random-generator.md)
+- [Design a Random Number Generator](problems/random-generator.md)
 - [Design Parking Lot](problems/parking-lot.md)
 - [Design a Vending Machine](https://medium.com/swlh/vending-machine-design-a-state-design-pattern-approach-5b7e1a026cd2)
 - [Design Stack Overflow](problems/stack-overflow.md)
