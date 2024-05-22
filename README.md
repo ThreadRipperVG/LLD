@@ -27,7 +27,7 @@ Learn Low Level Design (LLD) and prepare for interviews using free resources.
 
 ## Low Level Design Interview Problems
 ### Easy
-- Design a random number generator that generates random number within the range ( L,R ) given as input, the probabitlity of each number coming in the range should be almost same.
+- [Design a Random Number Generator] (problems/random-generator.md)
 - [Design Parking Lot](problems/parking-lot.md)
 - [Design a Vending Machine](https://medium.com/swlh/vending-machine-design-a-state-design-pattern-approach-5b7e1a026cd2)
 - [Design Stack Overflow](problems/stack-overflow.md)
